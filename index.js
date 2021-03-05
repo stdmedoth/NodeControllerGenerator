@@ -2,15 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const mysql = require('mysql');
 
-var database_conf = require('./dbconf.json');
 var api_dir = "api";
-
-var con = mysql.createConnection({
-  host: database_conf.connection.host,
-  user: database_conf.connection.user,
-  password: database_conf.connection.password,
-  database: database_conf.connection.database
-});
+var con = null;
+var dbconf = null;
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -18,9 +12,24 @@ function capitalizeFirstLetter(string) {
 
 class CreatorContext {
 
+  set_dbconf(conf){
+    dbconf = conf
+    //conf
+    //{
+    //  host: host,
+    //  user: user,
+    //  password: password,
+    //  database: database
+    //}
+    con = mysql.createConnection(dbconf);
+  }
+
+  get_dbconf(){
+    return dbconf;
+  }
+
   create_controller_template(table){
     var template = fs.readFileSync(path.resolve(__dirname, "./templates/controller_template.js"), 'utf8');
-    console.log(table)
     template = template.replace(/{{Controller}}/g, capitalizeFirstLetter(table));
     return template.replace(/{{controller}}/g, table);
   }
@@ -34,10 +43,10 @@ class CreatorContext {
   create_dbconf_template(){
     var template = fs.readFileSync(path.resolve(__dirname, "./templates/dbconf_template.js"), 'utf8')
     template = template.replace(/{client}/g, 'mysql');
-    template = template.replace(/{host}/g, database_conf.connection.host);
-    template = template.replace(/{user}/g, database_conf.connection.user);
-    template = template.replace(/{password}/g, database_conf.connection.password);
-    return template = template.replace(/{database}/g, database_conf.connection.database);
+    template = template.replace(/{host}/g, get_dbconf().host);
+    template = template.replace(/{user}/g, get_dbconf().user);
+    template = template.replace(/{password}/g, get_dbconf().password);
+    return template = template.replace(/{database}/g, get_dbconf().database);
   }
 
   create_server_template(tables){
@@ -72,7 +81,7 @@ class CreatorContext {
     con.query("SHOW TABLES", function (err, result) {
       if (err) throw err;
       tables = result.map( (item, i) => {
-        return item['Tables_in_'+database_conf.connection.database];
+        return item['Tables_in_'+ creator.get_dbconf().database];
       });
 
       if (!fs.existsSync('api')){
