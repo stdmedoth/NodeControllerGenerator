@@ -13,9 +13,9 @@ Esse pacote te permite fazer isso com apenas um comando
     //crie o objeto e chame o criador de api
     creator.set_dbconf({
       host: "localhost",
-      user: "calistu",
-      password: "bash9835",
-      database: "contas"
+      user: "root",
+      password: "1234",
+      database: "banco"
     })
     creator.create_api();
 
