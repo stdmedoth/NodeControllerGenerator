@@ -1,0 +1,26 @@
+{
+  "name": "nodecontrollercreator",
+  "version": "1.0.0",
+  "description": "Node Controller Generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stdmedoth/NodeControllerGenerator.git"
+  },
+  "keywords": [
+    "API",
+    "Generator"
+  ],
+  "author": "João Calisto (stdmedoth)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stdmedoth/NodeControllerGenerator/issues"
+  },
+  "homepage": "https://github.com/stdmedoth/NodeControllerGenerator#readme",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
+}
