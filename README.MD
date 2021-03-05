@@ -6,11 +6,8 @@ Criador de api pelo banco de dados mysql
 Já precisou criar uma api rapida em node js sem precisar programar?
 Esse pacote te permite fazer isso com apenas um comando
 
-    //Configure o dbconf.json
-    const creator = require('nodecontrollercreator');
-
-
     //crie o objeto e chame o criador de api
+    const creator = require('nodecontrollercreator');
     creator.set_dbconf({
       host: "localhost",
       user: "root",
