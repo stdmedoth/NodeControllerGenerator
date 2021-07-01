@@ -34,6 +34,10 @@ class CreatorContext {
     return template.replace(/{{controller}}/g, table);
   }
 
+  create_server_template(){
+    return fs.readFileSync(path.resolve(__dirname, "./templates/server_template.js"), 'utf8')
+  }
+
   create_router_template(table){
     var template = fs.readFileSync(path.resolve(__dirname, "./templates/router_template.js"), 'utf8')
     template = template.replace(/{{Controller}}/g, capitalizeFirstLetter(table));
@@ -43,21 +47,21 @@ class CreatorContext {
   create_dbconf_template(){
     var template = fs.readFileSync(path.resolve(__dirname, "./templates/dbconf_template.js"), 'utf8')
     template = template.replace(/{client}/g, 'mysql');
-    template = template.replace(/{host}/g, get_dbconf().host);
-    template = template.replace(/{user}/g, get_dbconf().user);
-    template = template.replace(/{password}/g, get_dbconf().password);
-    return template = template.replace(/{database}/g, get_dbconf().database);
+    template = template.replace(/{host}/g, this.get_dbconf().host);
+    template = template.replace(/{user}/g, this.get_dbconf().user);
+    template = template.replace(/{password}/g, this.get_dbconf().password);
+    return template = template.replace(/{database}/g, this.get_dbconf().database);
   }
 
-  create_server_template(tables){
-    var template = fs.readFileSync(path.resolve(__dirname, "./templates/server_template.js"), 'utf8')
+  create_routes_template(tables){
+    var template = fs.readFileSync(path.resolve(__dirname, "./templates/routes_template.js"), 'utf8')
 
     let required_routes = "";
     let used_routes = "";
 
     for (let table of tables) {
-      required_routes += "const " + table + "_router = require('./routes/" + table + "/" + table + ".js')\n";
-      used_routes += "app.use(" + table + "_router)\n";
+      //IcmsInterestadual_router: require('./routes/IcmsInterestadual/IcmsInterestadual.js'),
+      required_routes += table + "_router: require('./routes/" + table + "/" + table + ".js'),\n";
     }
 
     template = template.replace('{{required routes}}', required_routes);
@@ -128,6 +132,19 @@ class CreatorContext {
             return console.log(err);
           }
           console.log("Server criado!");
+      });
+
+      if (!tables.length){
+        console.log("Não há tabelas");
+        return 1;
+      }
+
+      let routes_template = creator.create_routes_template(tables)
+      fs.writeFile("api/routes.js", routes_template, { overwrite: true }, function(err) {
+          if(err) {
+            return console.log(err);
+          }
+          console.log("Rotas criada!");
       });
 
       if (!tables.length){

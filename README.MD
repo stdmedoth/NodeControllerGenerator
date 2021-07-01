@@ -1,29 +1,32 @@
-#Node Controller Generator
+# Node Controller Generator
 
+API creator by mysql database
 
-Criador de api pelo banco de dados mysql
+Ever needed to create a quick api in node js without needing to program?
+This package allows you to do this with just one command.
 
-Já precisou criar uma api rapida em node js sem precisar programar?
-Esse pacote te permite fazer isso com apenas um comando
+The api will be based on your database tables, it will work with all columns
 
-    //crie o objeto e chame o criador de api
+The add, get, delete, update routes will be generated for each of your tables in the SQL database
+
+    //create the object and call the api creator
     const creator = require('nodecontrollercreator');
     creator.set_dbconf({
       host: "localhost",
       user: "root",
       password: "1234",
-      database: "banco"
+      database: "database"
     })
     creator.create_api();
 
 
-    //observe que foi gerado uma api no diretorio de execução
+    //note that an api was generated in the execution directory
     cd api
     npm install
     node server.js
 
-aproveite sua api
+enjoy your api
 
 
-Criador João Victor Calisto (stdmedoth)
+Creator João Victor Calisto (stdmedoth)
 jovictor210@gmail.com
